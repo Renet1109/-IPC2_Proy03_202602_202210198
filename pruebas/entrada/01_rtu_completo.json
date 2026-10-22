@@ -1,0 +1,15 @@
+[
+  {"NIT": "7378106", "nombre": "Empresa ABC, S.A."},
+  {"NIT": "8338817", "nombre": "Comercial XYZ, S.A."},
+  {"NIT": "5123453", "nombre": "Servicios Integrales del Norte"},
+  {"NIT": "1000004", "nombre": "Papelera Central"},
+  {"NIT": "999999K", "nombre": "Distribuidora El Quetzal"},
+  {"NIT": "1234560", "nombre": "Ferretería La Esquina"},
+  {"NIT": "6K", "nombre": "Tienda Mínima"},
+  {"NIT": "24680133", "nombre": "Transportes Atitlán"},
+  {"NIT": "123456789012345678908", "nombre": "Corporación de Veinte Dígitos"},
+  {"NIT": "5123456", "nombre": "NIT con verificador malo"},
+  {"NIT": "12A4", "nombre": "NIT con letras"},
+  {"NIT": "", "nombre": "NIT vacío"},
+  {"NIT": "7378106", "nombre": "Empresa ABC, S.A. (razón social actualizada)"}
+]

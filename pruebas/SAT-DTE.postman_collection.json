@@ -1,0 +1,613 @@
+{
+  "info": {
+    "name": "SAT DTE - 202210198",
+    "description": "Proyecto 3 IPC2. API local; cargar RTU antes de facturas. Inicializar elimina todos los datos del simulador.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5001",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "00 Inicializar (borra datos)",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": "{{baseUrl}}/Inicializar"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "01_rtu_completo.json",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/Procesar",
+        "body": {
+          "mode": "raw",
+          "raw": "[\n  {\"NIT\": \"7378106\", \"nombre\": \"Empresa ABC, S.A.\"},\n  {\"NIT\": \"8338817\", \"nombre\": \"Comercial XYZ, S.A.\"},\n  {\"NIT\": \"5123453\", \"nombre\": \"Servicios Integrales del Norte\"},\n  {\"NIT\": \"1000004\", \"nombre\": \"Papelera Central\"},\n  {\"NIT\": \"999999K\", \"nombre\": \"Distribuidora El Quetzal\"},\n  {\"NIT\": \"1234560\", \"nombre\": \"Ferretería La Esquina\"},\n  {\"NIT\": \"6K\", \"nombre\": \"Tienda Mínima\"},\n  {\"NIT\": \"24680133\", \"nombre\": \"Transportes Atitlán\"},\n  {\"NIT\": \"123456789012345678908\", \"nombre\": \"Corporación de Veinte Dígitos\"},\n  {\"NIT\": \"5123456\", \"nombre\": \"NIT con verificador malo\"},\n  {\"NIT\": \"12A4\", \"nombre\": \"NIT con letras\"},\n  {\"NIT\": \"\", \"nombre\": \"NIT vacío\"},\n  {\"NIT\": \"7378106\", \"nombre\": \"Empresa ABC, S.A. (razón social actualizada)\"}\n]\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "02_facturas_marzo_graficas.json",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/Procesar",
+        "body": {
+          "mode": "raw",
+          "raw": "[\n  {\"TIEMPO\": \"Guatemala, 01/03/2025 10:00 hrs.\", \"REFERENCIA\": \"G00001\", \"NIT_EMISOR\": \"5123453\", \"NIT_RECEPTOR\": \"999999K\", \"VALOR\": 4997.77, \"IVA\": 599.73, \"TOTAL\": 5597.50},\n  {\"TIEMPO\": \"Guatemala, 01/03/2025 10:00 hrs.\", \"REFERENCIA\": \"G00002\", \"NIT_EMISOR\": \"999999K\", \"NIT_RECEPTOR\": \"1234560\", \"VALOR\": 4518.87, \"IVA\": 542.26, \"TOTAL\": 5061.13},\n  {\"TIEMPO\": \"Guatemala, 02/03/2025 10:00 hrs.\", \"REFERENCIA\": \"G00003\", \"NIT_EMISOR\": \"8338817\", \"NIT_RECEPTOR\": \"999999K\", \"VALOR\": 3268.36, \"IVA\": 392.20, \"TOTAL\": 3660.56},\n  {\"TIEMPO\": \"Guatemala, 02/03/2025 10:00 hrs.\", \"REFERENCIA\": \"G00004\", \"NIT_EMISOR\": \"999999K\", \"NIT_RECEPTOR\": \"1000004\", \"VALOR\": 4117.13, \"IVA\": 494.06, \"TOTAL\": 4611.19}\n]\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "03_facturas_todos_los_errores.json",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/Procesar",
+        "body": {
+          "mode": "raw",
+          "raw": "[\n  {\"TIEMPO\": \"Guatemala, 01/04/2025 10:00 hrs.\", \"REFERENCIA\": \"E01\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 1500.00, \"IVA\": 180.00, \"TOTAL\": 1680.00},\n  {\"TIEMPO\": \"Guatemala, 01/04/2025 10:00 hrs.\", \"REFERENCIA\": \"E02\", \"NIT_EMISOR\": \"8338817\", \"NIT_RECEPTOR\": \"5123453\", \"VALOR\": 75.50, \"IVA\": 9.06, \"TOTAL\": 84.56},\n  {\"TIEMPO\": \"Guatemala, 02/04/2025 10:00 hrs.\", \"REFERENCIA\": \"E03\", \"NIT_EMISOR\": \"4509870\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 02/04/2025 10:00 hrs.\", \"REFERENCIA\": \"E04\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"7777779\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 03/04/2025 10:00 hrs.\", \"REFERENCIA\": \"E05\", \"NIT_EMISOR\": \"5123456\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 03/04/2025 10:00 hrs.\", \"REFERENCIA\": \"E06\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"12A4\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 04/04/2025 10:00 hrs.\", \"REFERENCIA\": \"E07\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 13.00, \"TOTAL\": 113.00},\n  {\"TIEMPO\": \"Guatemala, 04/04/2025 10:00 hrs.\", \"REFERENCIA\": \"E08\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.01},\n  {\"TIEMPO\": \"Guatemala, 05/04/2025 10:00 hrs.\", \"REFERENCIA\": \"G00001\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 05/04/2025 10:00 hrs.\", \"REFERENCIA\": \"E01\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 06/04/2025 10:00 hrs.\", \"REFERENCIA\": \"E11\", \"NIT_EMISOR\": \"5123456\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 200.00, \"IVA\": 30.00, \"TOTAL\": 235.00},\n  {\"TIEMPO\": \"Guatemala, 06/04/2025 10:00 hrs.\", \"REFERENCIA\": \"E12\", \"NIT_EMISOR\": \"4509870\", \"NIT_RECEPTOR\": \"7777779\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"sin fecha\", \"REFERENCIA\": \"E13\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 07/04/2025 10:00 hrs.\", \"REFERENCIA\": \"E14\", \"NIT_EMISOR\": \"1000004\", \"NIT_RECEPTOR\": \"7378106\", \"VALOR\": 10.05, \"IVA\": 1.21, \"TOTAL\": 11.26}\n]\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "04_facturas_bordes_formato.json",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/Procesar",
+        "body": {
+          "mode": "raw",
+          "raw": "[\n  {\"TIEMPO\": \"Guatemala, 05/06/2025 08:05 hrs.\", \"REFERENCIA\": \"F01\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Ciudad de Guatemala, 5/6/2025 9:05\", \"REFERENCIA\": \"F02\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"01/07/2025 00:00\", \"REFERENCIA\": \"F03\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 31/12/2025 23:59 hrs.\", \"REFERENCIA\": \"F04\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Antigua Guatemala, 29/02/2024 10:00 hrs.\", \"REFERENCIA\": \"F05\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 29/02/2025 10:00 hrs.\", \"REFERENCIA\": \"F06\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 15/03/2025\", \"REFERENCIA\": \"F07\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 15/08/2025 10:00 hrs.\", \"REFERENCIA\": \"F08\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 0.04, \"IVA\": 0.00, \"TOTAL\": 0.04},\n  {\"TIEMPO\": \"Guatemala, 15/08/2025 10:00 hrs.\", \"REFERENCIA\": \"F09\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 99999999.99, \"IVA\": 12000000.00, \"TOTAL\": 111999999.99},\n  {\"TIEMPO\": \"Guatemala, 15/08/2025 10:00 hrs.\", \"REFERENCIA\": \"F10\", \"NIT_EMISOR\": \"6K\", \"NIT_RECEPTOR\": \"7378106\", \"VALOR\": 250.00, \"IVA\": 30.00, \"TOTAL\": 280.00},\n  {\"TIEMPO\": \"Guatemala, 15/08/2025 10:00 hrs.\", \"REFERENCIA\": \"F11\", \"NIT_EMISOR\": \"123456789012345678908\", \"NIT_RECEPTOR\": \"7378106\", \"VALOR\": 250.00, \"IVA\": 30.00, \"TOTAL\": 280.00},\n  {\"TIEMPO\": \"Guatemala, 15/08/2025 10:00 hrs.\", \"REFERENCIA\": \"F12-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 15/08/2025 10:00 hrs.\", \"REFERENCIA\": \"F13\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"6k\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00}\n]\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "06_carga_100_facturas.json",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/Procesar",
+        "body": {
+          "mode": "raw",
+          "raw": "[\n  {\"TIEMPO\": \"Guatemala, 01/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000001\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 02/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000002\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 03/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000003\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 04/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000004\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 05/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000005\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 06/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000006\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 07/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000007\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 08/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000008\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 09/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000009\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 10/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000010\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 11/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000011\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 12/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000012\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 13/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000013\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 14/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000014\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 15/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000015\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 16/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000016\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 17/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000017\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 18/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000018\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 19/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000019\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 20/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000020\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 01/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000021\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 02/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000022\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 03/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000023\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 04/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000024\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 05/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000025\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 06/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000026\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 07/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000027\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 08/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000028\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 09/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000029\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 10/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000030\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 11/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000031\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 12/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000032\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 13/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000033\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 14/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000034\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 15/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000035\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 16/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000036\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 17/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000037\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 18/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000038\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 19/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000039\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 20/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000040\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 01/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000041\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 02/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000042\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 03/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000043\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 04/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000044\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 05/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000045\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 06/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000046\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 07/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000047\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 08/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000048\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 09/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000049\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 10/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000050\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 11/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000051\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 12/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000052\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 13/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000053\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 14/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000054\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 15/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000055\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 16/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000056\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 17/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000057\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 18/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000058\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 19/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000059\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 20/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000060\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 01/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000061\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 02/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000062\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 03/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000063\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 04/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000064\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 05/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000065\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 06/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000066\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 07/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000067\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 08/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000068\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 09/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000069\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 10/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000070\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 11/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000071\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 12/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000072\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 13/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000073\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 14/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000074\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 15/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000075\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 16/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000076\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 17/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000077\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 18/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000078\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 19/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000079\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 20/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000080\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 01/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000081\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 02/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000082\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 03/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000083\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 04/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000084\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 05/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000085\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 06/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000086\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 07/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000087\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 08/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000088\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 09/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000089\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 10/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000090\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 11/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000091\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 12/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000092\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 13/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000093\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 14/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000094\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 15/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000095\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 16/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000096\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 17/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000097\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 18/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000098\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 19/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000099\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00},\n  {\"TIEMPO\": \"Guatemala, 20/05/2025 10:00 hrs.\", \"REFERENCIA\": \"L000100\", \"NIT_EMISOR\": \"7378106\", \"NIT_RECEPTOR\": \"8338817\", \"VALOR\": 100.00, \"IVA\": 12.00, \"TOTAL\": 112.00}\n]\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Entradas inválidas",
+      "item": [
+        {
+          "name": "05a_json_malformado.json",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/Procesar",
+            "body": {
+              "mode": "raw",
+              "raw": "[{\"TIEMPO\": \"Guatemala, 01/01/2025 10:00 hrs.\", \"REFERENCIA\": \"X1\", \"NIT_EMISOR\": \"7378106\",\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 400\", function () { pm.response.to.have.status(400); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "05b_arreglo_vacio.json",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/Procesar",
+            "body": {
+              "mode": "raw",
+              "raw": "[]\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 400\", function () { pm.response.to.have.status(400); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "05c_objeto_suelto.json",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/Procesar",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"NIT\": \"7378106\", \"nombre\": \"No soy un arreglo\"}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 400\", function () { pm.response.to.have.status(400); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "05d_sin_llaves_conocidas.json",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/Procesar",
+            "body": {
+              "mode": "raw",
+              "raw": "[{\"foo\": 1}, {\"bar\": 2}]\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 400\", function () { pm.response.to.have.status(400); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Consultas",
+      "item": [
+        {
+          "name": "Estado",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/Estado"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "RTU",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/Contribuyentes"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Emitidas",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/ConsultaDatos?nit=999999K&tipo=emitidas&inicio=2025-03-01&fin=2025-03-02"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Recibidas",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/ConsultaDatos?nit=999999K&tipo=recibidas&inicio=2025-03-01&fin=2025-03-02"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "IVA",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/ResumenIva?fecha=2025-03-02"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Rango con IVA",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/ResumenRango?inicio=2025-03-01&fin=2025-03-02&sinIva=false"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Rango sin IVA",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/ResumenRango?inicio=2025-03-01&fin=2025-03-02&sinIva=true"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Errores",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/ReporteErrores?inicio=2025-04-01&fin=2025-04-07"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "PDF y gráficas",
+      "item": [
+        {
+          "name": "PDF contribuyente",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/Reportes/contribuyente.pdf?nit=999999K&tipo=emitidas&inicio=2025-03-01&fin=2025-03-02"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "PDF IVA",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/Reportes/iva.pdf?fecha=2025-03-02"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "PDF rango",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/Reportes/rango.pdf?inicio=2025-03-01&fin=2025-03-02"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "PDF errores",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/Reportes/errores.pdf?inicio=2025-04-01&fin=2025-04-07"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Gráfica IVA",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/Grafica?tipo=iva&fecha=2025-03-02"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Gráfica rango",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/Grafica?tipo=rango&inicio=2025-03-01&fin=2025-03-02"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
