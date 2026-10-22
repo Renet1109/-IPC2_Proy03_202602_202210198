@@ -1,0 +1,14 @@
+**/bin/
+**/obj/
+**/App_Data/
+.vs/
+.idea/
+*.user
+*.log
+logs/
+dist/
+pruebas/resultados_locales.json
+**/__pycache__/
+*.pyc
+/respaldos/
+/tmp/
