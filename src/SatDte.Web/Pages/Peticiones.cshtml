@@ -1,0 +1,40 @@
+@page
+@model PeticionesModel
+@{ ViewData["Title"] = "Peticiones y reportes"; }
+<div class="eyebrow">EXPLORA LA INFORMACIÓN</div><h1>Peticiones y reportes</h1><p class="intro">Consulta las facturas y convierte los datos en resúmenes claros.</p>
+<nav class="tabs" aria-label="Tipos de petición">
+@foreach (var t in new[] { ("contribuyente", "Contribuyente"), ("iva", "Resumen de IVA"), ("rango", "Rango de fechas"), ("errores", "Facturas y errores") }) { <a asp-route-Tipo="@t.Item1" class="@(Model.Tipo == t.Item1 ? "selected" : "")">@t.Item2</a> }
+</nav>
+@if (Model.Error is not null) { <div class="alert error" role="alert">@Model.Error</div> }
+<section class="card"><h2>Filtros de la consulta</h2><form method="get" class="filters"><input type="hidden" asp-for="Tipo" /><input type="hidden" name="Buscar" value="true" />
+@if (Model.Tipo == "contribuyente") {
+<div class="field"><label asp-for="Nit">NIT del contribuyente</label><input asp-for="Nit" placeholder="Ej. 999999K" maxlength="21" required /></div><div class="field"><label asp-for="Sentido">Facturas</label><select asp-for="Sentido"><option value="emitidas">Emitidas</option><option value="recibidas">Recibidas</option></select></div>
+}
+@if (Model.Tipo == "iva") { <div class="field"><label asp-for="Fecha">Fecha</label><input type="date" asp-for="Fecha" required /></div> }
+else { <div class="field"><label asp-for="Inicio">Fecha inicial</label><input type="date" asp-for="Inicio" required /></div><div class="field"><label asp-for="Fin">Fecha final</label><input type="date" asp-for="Fin" required /></div> }
+@if (Model.Tipo == "rango") { <div class="field"><label asp-for="SinIva">Montos</label><select asp-for="SinIva"><option value="false">Total con IVA</option><option value="true">Sin IVA</option></select></div> }
+<button class="button" type="submit">Consultar →</button></form><small class="muted">Se utiliza la fecha de la factura. El rango incluye ambos extremos y muestra los días con movimientos.</small></section>
+@if (Model.HayResultado) {
+<div class="section-head results-title"><h2>Resultado de la petición</h2><a class="button secondary" asp-page-handler="Pdf" asp-route-Tipo="@Model.Tipo" asp-route-Nit="@Model.Nit" asp-route-Sentido="@Model.Sentido" asp-route-Inicio="@Model.Inicio" asp-route-Fin="@Model.Fin" asp-route-Fecha="@Model.Fecha" asp-route-SinIva="@Model.SinIva">↓ Descargar PDF</a></div>
+}
+@if (Model.Consulta is { } c) {
+<div class="summary-strip"><div><small>CONTRIBUYENTE</small><strong>@c.Nombre</strong><span>@c.Nit · @c.Tipo</span></div><div><small>FACTURAS</small><strong>@c.CantidadFacturas</strong></div><div><small>TOTAL FACTURADO</small><strong>Q @c.TotalFacturado.ToString("N2")</strong></div></div>
+<section class="card table-card"><table><caption>Resumen por fecha</caption><thead><tr><th>Fecha</th><th>Facturas autorizadas</th><th class="num">Monto total</th></tr></thead><tbody>@foreach (var d in c.Dias) { <tr><td>@d.Fecha</td><td>@d.CantidadFacturas</td><td class="num">Q @d.MontoTotal.ToString("N2")</td></tr> }</tbody></table>@if (c.Dias.Count == 0) { <p class="empty">No hay facturas autorizadas para estos filtros.</p> }</section>
+@if (c.Facturas.Count > 0) { <section class="card table-card"><table><caption>Detalle de facturas</caption><thead><tr><th>Fecha</th><th>Referencia</th><th>Emisor</th><th>Receptor</th><th>Autorización</th><th class="num">Total</th></tr></thead><tbody>@foreach (var f in c.Facturas) { <tr><td>@f.Fecha.ToString("dd/MM/yyyy HH:mm")</td><td>@f.Referencia</td><td>@f.NitEmisor</td><td>@f.NitReceptor</td><td><code>@f.CodigoAprobacion</code></td><td class="num">Q @f.Total.ToString("N2")</td></tr> }</tbody></table></section> }
+}
+@if (Model.Iva is { } iva) {
+<div class="summary-strip"><div><small>FECHA</small><strong>@iva.Fecha</strong></div><div><small>IVA EMITIDO</small><strong>Q @iva.TotalIvaEmitido.ToString("N2")</strong></div><div><small>IVA RECIBIDO</small><strong>Q @iva.TotalIvaRecibido.ToString("N2")</strong></div></div>
+<section class="card table-card"><table><caption>Movimientos de IVA por NIT</caption><thead><tr><th>NIT</th><th>Nombre</th><th class="num">IVA emitido</th><th class="num">IVA recibido</th></tr></thead><tbody>@foreach (var m in iva.Movimientos) { <tr><td>@m.Nit</td><td>@m.Nombre</td><td class="num">Q @m.IvaEmitido.ToString("N2")</td><td class="num">Q @m.IvaRecibido.ToString("N2")</td></tr> }</tbody></table>@if (iva.Movimientos.Count == 0) { <p class="empty">No hay movimientos autorizados en esta fecha.</p> }</section>
+}
+@if (Model.Rango is { } rango) {
+<div class="summary-strip"><div><small>PERÍODO</small><strong>@rango.Inicio → @rango.Fin</strong></div><div><small>TIPO DE MONTO</small><strong>@(rango.SinIva ? "Sin IVA" : "Total con IVA")</strong></div><div><small>TOTAL GENERAL</small><strong>Q @rango.TotalGeneral.ToString("N2")</strong></div></div>
+<section class="card table-card"><table><caption>Valor autorizado por día</caption><thead><tr><th>Fecha</th><th>Facturas autorizadas</th><th class="num">Valor autorizado</th></tr></thead><tbody>@foreach (var d in rango.Dias) { <tr><td>@d.Fecha</td><td>@d.CantidadFacturas</td><td class="num">Q @d.ValorAutorizado.ToString("N2")</td></tr> }</tbody></table>@if (rango.Dias.Count == 0) { <p class="empty">No hay facturas autorizadas en este rango.</p> }</section>
+}
+@if (Model.Errores is { } errores) {
+<div class="summary-strip"><div><small>RECIBIDAS</small><strong>@errores.TotalRecibidas</strong></div><div><small>SIN ERRORES</small><strong>@errores.TotalSinErrores</strong></div><div><small>RECHAZADAS</small><strong>@errores.TotalRechazadas</strong></div></div>
+<section class="card table-card"><table class="errors-table"><caption>Recuento diario de intentos de facturación</caption><thead><tr><th>Fecha</th><th>Recibidas</th><th>Emisor inválido</th><th>Receptor inválido</th><th>Emisor inexistente</th><th>Receptor inexistente</th><th>IVA mal</th><th>Total mal</th><th>Ref. duplicada</th><th>Sin errores</th><th>Emisores</th><th>Receptores</th></tr></thead><tbody>@foreach (var d in errores.Dias) { <tr><td>@d.Fecha</td><td>@d.FacturasRecibidas</td><td>@d.NitEmisorInvalido</td><td>@d.NitReceptorInvalido</td><td>@d.NitEmisorInexistente</td><td>@d.NitReceptorInexistente</td><td>@d.IvaMalCalculado</td><td>@d.TotalMalCalculado</td><td>@d.ReferenciaDuplicada</td><td>@d.FacturasSinErrores</td><td>@d.Emisores</td><td>@d.Receptores</td></tr> }</tbody></table>@if (errores.Dias.Count == 0) { <p class="empty">No hay intentos de facturación en este rango.</p> }</section><p class="hint">@errores.Nota</p>
+}
+@if (Model.Iva is not null || Model.Rango is not null) {
+<section class="card"><div class="section-head"><h2>Gráfica del resumen</h2><span class="tag">Montos en quetzales</span></div><img class="chart" src="@Url.Page("/Peticiones", "Grafica", new { Model.Tipo, Model.Fecha, Model.Inicio, Model.Fin, Model.SinIva })" alt="Gráfica de barras del resumen consultado. Los valores exactos están en la tabla anterior." /></section>
+}
+@if (!Model.Buscar && !Model.HayResultado) { <div class="empty card"><strong>Prepara tu consulta</strong><p>Elige una petición y completa los filtros para ver sus resultados.</p><a asp-route-Tipo="@Model.Tipo" asp-route-Nit="999999K" asp-route-Fecha="2025-03-02" asp-route-Inicio="2025-03-01" asp-route-Fin="2025-03-02">Usar fechas de los archivos de ejemplo →</a></div> }

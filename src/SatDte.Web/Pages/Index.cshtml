@@ -1,0 +1,18 @@
+@page
+@model IndexModel
+@{ ViewData["Title"] = "Inicio"; }
+<div class="eyebrow">PANEL GENERAL</div><div class="page-heading"><div><h1>Tu centro de autorizaciones</h1><p>Carga mensajes, valida facturas y consulta los movimientos del RTU.</p></div><a class="button" asp-page="/Enviar">Enviar un mensaje <span>↗</span></a></div>
+@if (Model.Error is not null) { <div class="alert error" role="alert">@Model.Error</div> }
+@if (Model.Aviso is not null) { <div class="alert success" role="status">@Model.Aviso</div> }
+@if (Model.Estado is { } e) {
+<section class="metrics" aria-label="Estado del sistema">
+    <div class="metric"><span>Contribuyentes en RTU</span><strong>@e.Contribuyentes</strong><small>Registros vigentes</small></div>
+    <div class="metric"><span>Facturas autorizadas</span><strong>@e.FacturasAutorizadas</strong><small>Documentos sin errores</small></div>
+    <div class="metric"><span>Facturas rechazadas</span><strong>@e.FacturasRechazadas</strong><small>@e.DescartadasPorFormato descartadas por formato</small></div>
+    <div class="metric accent"><span>Total autorizado</span><strong class="money">Q @e.TotalAutorizado.ToString("N2")</strong><small>Valor con IVA</small></div>
+</section>
+}
+<div class="two-columns"><section class="card"><div class="section-head"><h2>Un flujo, tres pasos</h2><span class="tag">JSON → DTE</span></div>
+<ol class="steps"><li><span>01</span><div><h3>Actualiza el RTU</h3><p>Envía los NIT y los nombres. Solo los contribuyentes con NIT válido se guardan.</p></div></li><li><span>02</span><div><h3>Solicita autorizaciones</h3><p>Carga las facturas. La API revisa NIT, referencia, IVA y total antes de emitir un código único.</p></div></li><li><span>03</span><div><h3>Explora los resultados</h3><p>Consulta facturas emitidas o recibidas, visualiza resúmenes y descarga los reportes PDF.</p></div></li></ol>
+</section><section class="card blue-card"><span class="eyebrow">CONSULTA TUS DATOS</span><h2>De los mensajes<br />a una vista clara.</h2><p>Todos los reportes filtran por la fecha de la factura. Los códigos se generan con la fecha de autorización de Guatemala.</p><a class="button light" asp-page="/Peticiones">Abrir peticiones →</a><div class="mini-chart" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></section></div>
+<section class="card reset-card"><div><h2>Inicializar sistema</h2><p>Elimina el RTU, los intentos de facturación y los correlativos guardados.</p></div><form method="post" asp-page-handler="Inicializar" data-confirm="¿Eliminar todos los datos del simulador? Esta operación no se puede deshacer."><button class="button danger" type="submit">Inicializar</button></form></section>

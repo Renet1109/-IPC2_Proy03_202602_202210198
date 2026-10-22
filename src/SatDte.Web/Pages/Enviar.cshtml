@@ -1,0 +1,14 @@
+@page
+@model EnviarModel
+@{ ViewData["Title"] = "Enviar mensaje"; }
+<div class="eyebrow">ENTRADA DE DATOS</div><h1>Enviar mensaje</h1><p class="intro">Actualiza el registro tributario o solicita la autorización de tus facturas.</p>
+@if (Model.Error is not null) { <div class="alert error" role="alert">@Model.Error</div> }
+<section class="card"><div class="section-head"><h2>Carga de archivos JSON</h2><span class="tag">Hasta 5 MB por archivo</span></div>
+<p>Selecciona primero el archivo del RTU y después las facturas. Los archivos se procesan uno a uno en el orden mostrado en la vista previa.</p>
+<form method="post" enctype="multipart/form-data" id="upload-form"><div class="upload-zone"><span class="upload-icon" aria-hidden="true">↥</span><label asp-for="Archivos">Seleccionar archivos .json</label><input asp-for="Archivos" type="file" accept=".json,application/json" multiple required /><small>Hasta 20 archivos · Los originales se envían sin modificaciones</small></div><div id="previews" aria-live="polite"></div><div class="form-actions"><span>La API detecta automáticamente el tipo de mensaje.</span><button class="button" type="submit">Procesar mensajes →</button></div></form>
+</section>
+@if (Model.Resultados.Count > 0) { <h2 class="results-title">Respuestas del servicio</h2> }
+@foreach (var r in Model.Resultados) {
+<section class="card result"><div class="section-head"><h2>@r.Nombre</h2><span class="tag @(r.Correcto ? "ok" : "bad")">@(r.Correcto ? "Procesado" : "No procesado")</span></div><pre>@r.Mensaje</pre></section>
+}
+<div class="hint"><strong>¿Primer uso?</strong> Carga <code>01_rtu_completo.json</code> y luego <code>02_facturas_marzo_graficas.json</code> desde la carpeta <code>pruebas/entrada</code> del proyecto.</div>
