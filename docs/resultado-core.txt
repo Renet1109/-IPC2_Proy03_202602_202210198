@@ -1,0 +1,26 @@
+OK   NIT: módulo 11, K, base de 20 dígitos y minúsculas
+OK   NIT: verificador, letras y longitudes inválidas
+OK   Fechas: bisiesto, adornos, hora y calendario
+OK   IVA decimal: montos extremos
+OK   01 RTU: 9 nuevos, 1 actualizado, 3 inválidos
+OK   02 Marzo: 4 aprobaciones y correlativos
+OK   Consulta emitidas: Q 9672.32 y 2 facturas
+OK   Consulta recibidas: Q 9258.06
+OK   Resumen IVA: movimientos y conservación
+OK   Resumen rango: con y sin IVA
+OK   03 Errores: contadores independientes y sin doble conteo
+OK   Reporte errores: 13 recibidas, 3 sin errores, 10 rechazadas
+OK   04 Bordes: 11 aprobadas, 2 descartadas, 0 rechazadas
+OK   05 Vacío, objeto y estructura desconocida: rechazo sin mutación
+OK   Lote mixto: transacción completa
+OK   06 Volumen: 100 aprobadas y 118 códigos únicos contiguos
+OK   Concurrencia: 20 solicitudes independientes sin colisiones
+OK   Concurrencia: una referencia compartida se autoriza una sola vez
+OK   Cambio de día en Guatemala: correlativo vuelve a uno
+OK   Rechazo de parámetros inválidos
+OK   PDF y SVG: generación de reportes
+OK   Una segunda instancia no puede escribir el mismo archivo
+OK   Persistencia después de reabrir: siguiente código del mismo día
+OK   Inicializar borra RTU, facturas, descartes y correlativos
+
+Resultado: 24 correctas; 0 fallidas.

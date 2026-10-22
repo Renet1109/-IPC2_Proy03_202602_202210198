@@ -1,0 +1,53 @@
+{
+  "correctas": 12,
+  "resultados": [
+    {
+      "prueba": "Iniciar.cmd abre ambos servicios desde una carpeta con espacios",
+      "resultado": "OK"
+    },
+    {
+      "prueba": "Estado inicial vacío en el paquete",
+      "resultado": "OK"
+    },
+    {
+      "prueba": "Datos originales procesados en la aplicación publicada",
+      "resultado": "OK"
+    },
+    {
+      "prueba": "CSS publicado sin depender del código fuente",
+      "resultado": "OK"
+    },
+    {
+      "prueba": "JavaScript publicado",
+      "resultado": "OK"
+    },
+    {
+      "prueba": "Documentación PDF incluida y accesible",
+      "resultado": "OK"
+    },
+    {
+      "prueba": "20 comprobaciones Web sobre el paquete extraído",
+      "resultado": "OK"
+    },
+    {
+      "prueba": "Un segundo inicio detecta puertos ocupados sin afectar la instancia",
+      "resultado": "OK"
+    },
+    {
+      "prueba": "Detener.cmd cierra los dos servicios",
+      "resultado": "OK"
+    },
+    {
+      "prueba": "Iniciar.cmd permite volver a abrir el programa",
+      "resultado": "OK"
+    },
+    {
+      "prueba": "Las facturas permanecen guardadas después de cerrar y abrir",
+      "resultado": "OK"
+    },
+    {
+      "prueba": "Detención final libera los puertos",
+      "resultado": "OK"
+    }
+  ]
+}

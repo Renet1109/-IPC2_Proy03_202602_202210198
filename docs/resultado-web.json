@@ -1,0 +1,86 @@
+{
+  "correctas": 20,
+  "fallidas": 0,
+  "resultados": [
+    {
+      "prueba": "Inicio muestra RTU y datos",
+      "resultado": "OK"
+    },
+    {
+      "prueba": "Formulario de envío",
+      "resultado": "OK"
+    },
+    {
+      "prueba": "Consulta emitidas sin filtros ajenos",
+      "resultado": "OK"
+    },
+    {
+      "prueba": "Consulta recibidas",
+      "resultado": "OK"
+    },
+    {
+      "prueba": "IVA sin NIT obligatorio",
+      "resultado": "OK"
+    },
+    {
+      "prueba": "Rango con IVA",
+      "resultado": "OK"
+    },
+    {
+      "prueba": "Rango sin IVA",
+      "resultado": "OK"
+    },
+    {
+      "prueba": "Reporte de errores sin NIT",
+      "resultado": "OK"
+    },
+    {
+      "prueba": "Descarga PDF en Web: contribuyente",
+      "resultado": "OK"
+    },
+    {
+      "prueba": "Descarga PDF en Web: iva",
+      "resultado": "OK"
+    },
+    {
+      "prueba": "Descarga PDF en Web: rango",
+      "resultado": "OK"
+    },
+    {
+      "prueba": "Descarga PDF en Web: errores",
+      "resultado": "OK"
+    },
+    {
+      "prueba": "Gráfica en Web: iva",
+      "resultado": "OK"
+    },
+    {
+      "prueba": "Gráfica en Web: rango",
+      "resultado": "OK"
+    },
+    {
+      "prueba": "Ayuda personalizada",
+      "resultado": "OK"
+    },
+    {
+      "prueba": "Documentación accesible desde Ayuda",
+      "resultado": "OK"
+    },
+    {
+      "prueba": "Archivo inválido mostrado sin 500: 05a_json_malformado.json",
+      "resultado": "OK"
+    },
+    {
+      "prueba": "Archivo inválido mostrado sin 500: 05b_arreglo_vacio.json",
+      "resultado": "OK"
+    },
+    {
+      "prueba": "Archivo inválido mostrado sin 500: 05c_objeto_suelto.json",
+      "resultado": "OK"
+    },
+    {
+      "prueba": "Archivo inválido mostrado sin 500: 05d_sin_llaves_conocidas.json",
+      "resultado": "OK"
+    }
+  ]
+}
