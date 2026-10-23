@@ -16,7 +16,7 @@ Registros: `resultado-core.txt`, `resultado-http.json` y `resultado-web.json`. L
 
 En el navegador se seleccionaron los archivos 01 y 02 juntos, se verificaron el tipo y las primeras filas de la vista previa y se enviaron en orden. La Web mostró 9/1/3 para el RTU y cuatro autorizaciones con códigos del día de Guatemala. Se comprobó la tabla y la gráfica del resumen de IVA del 2 de marzo de 2025.
 
-La documentación tiene diez páginas: portada, cinco páginas de contenido y cuatro anexos. Se renderizaron sus páginas con Poppler y se revisaron los párrafos, los diagramas y las referencias. También se renderizaron los cuatro tipos de PDF producidos por la API. Se ajustó la paginación para que la nota del reporte de errores de siete días no quedara sola en otra página.
+La documentación adaptada a la plantilla tiene diez páginas: seis páginas de contenido y cuatro anexos. Se exportó el Word mediante Microsoft Word, se renderizó el PDF con Poppler y se revisaron todas sus páginas. Contiene un resumen de 156 palabras, abstract de 158 palabras, introducción de 111 palabras, cinco palabras clave y cuatro referencias APA. La verificación está en `verificacion-ensayo.json`. Se conservaron los encabezados institucionales, la composición a dos columnas y las partes originales de la plantilla. También se renderizaron los cuatro tipos de PDF producidos por la API. Se ajustó la paginación para que la nota del reporte de errores de siete días no quedara sola en otra página.
 
 ## Reproducción
 
@@ -31,4 +31,4 @@ Los tests del núcleo y HTTP utilizan sus propios archivos de estado. Las compro
 
 ## Límites de esta comprobación
 
-Se comprobó el funcionamiento local; no se realizó un despliegue público, una prueba de carga de producción, certificación SAT, publicación GitHub ni entrega en UEDI. La prueba del cambio de día usa IReloj con fecha controlada. El historial semanal de releases no forma parte de esta evidencia.
+Se comprobó el funcionamiento local; no se realizó un despliegue público, una prueba de carga de producción, certificación SAT ni entrega en UEDI. El código está publicado en GitHub y las versiones de recuperación se describen en `RELEASES.md`. La prueba del cambio de día usa IReloj con fecha controlada. El historial semanal de releases no forma parte de esta evidencia. La sección Ayuda se comprobó nuevamente para confirmar que descarga exactamente el PDF adaptado a la plantilla.

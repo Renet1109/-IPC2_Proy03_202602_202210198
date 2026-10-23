@@ -85,7 +85,9 @@ Se crea `dist/SAT_DTE_Windows_202210198.zip`, con la aplicación publicada, inic
 
 ## Documentación y entrega
 
-Lee `docs/API.md`, `docs/DECISIONES.md`, `docs/DIAGRAMAS.md` y `docs/ENTREGA.md`. El ensayo está en `docs/Documentacion.pdf`, con fuente editable en `docs/ENSAYO.md`. La plantilla específica de ensayo del curso no estaba entre los archivos recibidos: revisa portada, estilo y referencias antes de entregarlo.
+Lee `docs/API.md`, `docs/DECISIONES.md`, `docs/DIAGRAMAS.md` y `docs/ENTREGA.md`. El ensayo adaptado a la plantilla de IPC2 está en `docs/Documentacion.pdf` y `docs/Documentacion.docx`. Tiene seis páginas de contenido y cuatro de anexos, con resumen, abstract, palabras clave, introducción de 111 palabras, cuatro referencias APA y los diagramas solicitados. El contenido editable está en `docs/ENSAYO.md` y `docs/ensayo_contenido.json`.
+
+Para regenerar el Word, ejecuta `python docs/generar_documentacion.py` con `lxml`, `python-docx` y `Pillow` instalados. Después exporta el PDF con `powershell -NoProfile -ExecutionPolicy Bypass -File docs/Exportar_documentacion.ps1`; la exportación requiere Microsoft Word en Windows. La plantilla original está en `docs/plantillas/Ensayo_IPC2.docx`. Estas herramientas solo sirven para editar la documentación; la aplicación utiliza el PDF ya generado y no las necesita para ejecutarse.
 
 El nombre solicitado por el enunciado es **IPC2_Proy03_202602_202210198**. El repositorio proporcionado es [Renet1109/-IPC2_Proy03_202602_202210198](https://github.com/Renet1109/-IPC2_Proy03_202602_202210198), cuyo nombre contiene un guion adicional al inicio. Revisa ese detalle antes de entregar.
 
@@ -95,4 +97,4 @@ El 22 de octubre de 2026 se recuperaron los archivos desde los ZIP de la entrega
 
 El historial de recuperación se organiza en cinco partes: núcleo y persistencia, API HTTP, frontend Razor Pages, pruebas y compilación, y documentación e iniciadores. Consulta `git log --oneline --reverse` y `docs/REVISION_ENUNCIADO.md` para revisar los cambios y su relación con el enunciado.
 
-Los commits de recuperación corresponden al trabajo de esta fecha. Los cuatro releases semanales exigidos por el curso son un requisito adicional que no se acredita con estos commits. La entrega en UEDI y la configuración del colaborador se realizan desde las cuentas correspondientes.
+Los commits de recuperación corresponden al trabajo de esta fecha. Las versiones `v0.1.0`, `v0.2.0`, `v0.3.0` y `v1.0.0` documentan los avances del código recuperado; la última incluye el ensayo corregido. Consulta `docs/RELEASES.md`. Sus fechas reales de publicación no acreditan avances de semanas anteriores. La entrega en UEDI y la configuración del colaborador se realizan desde las cuentas correspondientes.

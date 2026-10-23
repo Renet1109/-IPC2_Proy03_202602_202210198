@@ -1,0 +1,19 @@
+{
+  "resumenPalabras": 156,
+  "abstractPalabras": 158,
+  "introduccionPalabras": 111,
+  "palabrasClave": 5,
+  "referencias": 4,
+  "paginasContenido": 6,
+  "paginasAnexos": 4,
+  "paginasTotales": 10,
+  "plantillaSha256": "79217801f046dd99f238fd33cfbf1501bab4f519a9c369dc389afa72b63204eb",
+  "plantillaSinCambios": true,
+  "motorRender": "Microsoft Word y Poppler",
+  "revisadoVisualmente": true,
+  "partesOriginalesPreservadas": 18,
+  "seccionesEnsayoOriginalesConservadas": true,
+  "diagramas": 4,
+  "pdfSha256": "530f3aeb39059c88bdb50c3175f6850f22a8cc821933c68ddcc22908b781fcc6",
+  "wordSha256": "8b05543da39c505e9403ffcef5e49ef74aedef21fcdce03cafbd1cecfccec1ef"
+}

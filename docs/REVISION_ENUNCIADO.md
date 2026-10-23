@@ -23,7 +23,7 @@ Estudiante: William René Toledo Corado. Carné: 202210198. Sección: B.
 | Ensayo y diagramas de clases, actividades y despliegue | 8 | `docs/ENSAYO.md`, `DIAGRAMAS.md` y `Documentacion.pdf` |
 | Conservar los mensajes originales | 8 | Los once archivos de `pruebas/entrada/` coinciden byte a byte con el ZIP recibido |
 
-El ensayo recuperado tiene portada, cinco páginas de contenido y cuatro anexos. La plantilla de ensayo propia del curso no fue adjuntada; corresponde contrastar su formato antes de entregar.
+El ensayo final está adaptado a la plantilla de IPC2 adjuntada posteriormente. Tiene seis páginas de contenido y cuatro anexos, con resumen de 156 palabras, abstract de 158, introducción de 111 y cuatro referencias APA. Se entrega en Word y PDF; la plantilla permanece sin cambios en `plantillas/Ensayo_IPC2.docx`.
 
 ## Historial de recuperación
 
@@ -35,4 +35,4 @@ Los cinco commits agrupan trabajo concreto: núcleo y persistencia, API, fronten
 
 La compilación Release y las 24 pruebas del núcleo pasaron en la nueva ubicación. La API recuperada pasó las 30 comprobaciones HTTP, incluidos los resultados esperados del ZIP, concurrencia, persistencia al reiniciar, PDF, SVG y entradas inválidas. El frontend pasó sus 20 comprobaciones después de actualizar el nombre del estudiante. En total son 74 comprobaciones correctas. Se revisaron visualmente las diez páginas de documentación y los cuatro tipos de reporte PDF. Los resultados reproducibles se consultan en `docs/VERIFICACION.md` y se pueden repetir con los comandos del README.
 
-El enunciado exige un repositorio llamado `IPC2_Proy03_202602_202210198`, cuatro releases semanales, agregar a `EliezerGG` como colaborador de la sección B y entregar en UEDI un texto con la URL del repositorio. El enlace proporcionado contiene un guion inicial adicional: `Renet1109/-IPC2_Proy03_202602_202210198`. Los commits locales no sustituyen los releases ni realizan la entrega en UEDI.
+El enunciado exige un repositorio llamado `IPC2_Proy03_202602_202210198`, cuatro releases semanales, agregar a `EliezerGG` como colaborador de la sección B y entregar en UEDI un texto con la URL del repositorio. Se prepararon cuatro versiones basadas en el código recuperado y el ensayo final, documentadas en `RELEASES.md`; se publican con fecha real y no acreditan avances de semanas anteriores. El enlace proporcionado contiene un guion inicial adicional: `Renet1109/-IPC2_Proy03_202602_202210198`. La revisión detectó además que la presentación de fechas del reporte diario usa ISO en lugar de dd/mm/yyyy. El nombre, ese formato de presentación, el acceso del auxiliar y la entrega en UEDI siguen pendientes de resolver.

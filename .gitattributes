@@ -1,3 +1,4 @@
 *.pdf binary
+*.docx binary
 *.zip binary
 pruebas/entrada/** -text
